@@ -10,3 +10,7 @@ Upgrade to Next.js 15
 Track how much time has been spent with the tab open
 Streak system
 Goal system
+
+Types to all variables
+Return types to all functions
+Api routes with NextRequest and NextResponse
