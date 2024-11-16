@@ -8,10 +8,10 @@ import sleep from "@/lib/sleep";
 
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import {
-  gameDelayBeforeStart,
-  gameHiddenSquareDuration,
-  gameVisibleSquareDuration,
-} from "@/settings/constants";
+  DELAY_BEFORE_START,
+  HIDDEN_SQUARE_DURATION,
+  VISIBLE_SQUARE_DURATION,
+} from "@/config/game";
 import useGameLogic from "@/hooks/useGameLogic";
 import { Strong } from "@/components/ui/Strong";
 import { useToast } from "@/hooks/use-toast";
@@ -271,9 +271,9 @@ export default function GameTutorial({
     const boardStepAnimation = async () => {
       while (stepRef.current === boardStep) {
         setTutorialSelectedSquare(Math.floor(Math.random() * 8));
-        await sleep(gameVisibleSquareDuration);
+        await sleep(VISIBLE_SQUARE_DURATION);
         setTutorialSelectedSquare(null);
-        await sleep(gameHiddenSquareDuration);
+        await sleep(HIDDEN_SQUARE_DURATION);
       }
       setIsPlayingAnimation(false);
     };
@@ -290,9 +290,9 @@ export default function GameTutorial({
     const level1ExplanationAnimation = async () => {
       while (stepRef.current === level1ExplanationStep) {
         setTutorialSelectedSquare(6);
-        await sleep(gameVisibleSquareDuration);
+        await sleep(VISIBLE_SQUARE_DURATION);
         setTutorialSelectedSquare(null);
-        await sleep(gameHiddenSquareDuration);
+        await sleep(HIDDEN_SQUARE_DURATION);
       }
 
       setIsPlayingAnimation(false);
@@ -307,7 +307,7 @@ export default function GameTutorial({
 
     const handleStartGameDelay = async () => {
       setIsLoadingGame(true);
-      await sleep(gameDelayBeforeStart);
+      await sleep(DELAY_BEFORE_START);
       setIsLoadingGame(false);
     };
 
@@ -316,9 +316,9 @@ export default function GameTutorial({
 
       while (stepRef.current === level2ExplanationStep) {
         setTutorialSelectedSquare(square);
-        await sleep(gameVisibleSquareDuration);
+        await sleep(VISIBLE_SQUARE_DURATION);
         setTutorialSelectedSquare(null);
-        await sleep(gameHiddenSquareDuration);
+        await sleep(HIDDEN_SQUARE_DURATION);
         square = square === 5 ? 6 : 5;
       }
       setIsPlayingAnimation(false);

@@ -14,15 +14,15 @@ import {
   useState,
 } from "react";
 import { useSidebar } from "@/context/SidebarContext";
-import {
-  gameBaseSequenceLength,
-  gameDelayBeforeStart,
-  gameHiddenSquareDuration,
-  gameVisibleSquareDuration,
-} from "@/settings/constants";
 import enterFullScreen from "@/lib/enterFullScreen";
 import exitFullScreen from "@/lib/exitFullScreen";
 import { useToast } from "./use-toast";
+import {
+  BASE_SEQUENCE_LENGTH,
+  DELAY_BEFORE_START,
+  HIDDEN_SQUARE_DURATION,
+  VISIBLE_SQUARE_DURATION,
+} from "@/config/game";
 
 interface useGameLogicProps {
   startingLevel: number;
@@ -109,9 +109,9 @@ export default function useGameLogic({
     }
 
     const timePlayed =
-      (gameBaseSequenceLength + level) *
-        (gameVisibleSquareDuration + gameHiddenSquareDuration) +
-      gameDelayBeforeStart;
+      (BASE_SEQUENCE_LENGTH + level) *
+        (VISIBLE_SQUARE_DURATION + HIDDEN_SQUARE_DURATION) +
+      DELAY_BEFORE_START;
 
     const response = await fetch("/api/game/insert-game", {
       method: "POST",
@@ -138,7 +138,7 @@ export default function useGameLogic({
       shouldPressButton.current = correctHitSequence.current[step];
 
       setSelectedSquare(position);
-      await sleep(gameVisibleSquareDuration);
+      await sleep(VISIBLE_SQUARE_DURATION);
 
       if (
         isTutorial &&
@@ -151,7 +151,7 @@ export default function useGameLogic({
       }
 
       setSelectedSquare(null);
-      await sleep(gameHiddenSquareDuration);
+      await sleep(HIDDEN_SQUARE_DURATION);
 
       if (hasPressedButton.current) {
         playerHitSequence.current.push(true);
@@ -194,7 +194,7 @@ export default function useGameLogic({
     );
     playerHitSequence.current = [];
 
-    await sleep(gameDelayBeforeStart);
+    await sleep(DELAY_BEFORE_START);
     await playGame();
   }, [level, playGame, setIsVisible]);
 
