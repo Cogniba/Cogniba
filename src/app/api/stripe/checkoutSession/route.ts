@@ -24,8 +24,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           },
         ],
         // TODO
-        success_url: `${origin}/result?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${origin}/result?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${origin}/TODO?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/TODO`,
       });
 
     return NextResponse.json(
