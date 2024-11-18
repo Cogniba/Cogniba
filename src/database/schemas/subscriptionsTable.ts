@@ -1,7 +1,7 @@
 import { date, pgEnum, pgTable, uuid } from "drizzle-orm/pg-core";
 import { profilesTable } from "./profilesTable";
 
-const statusEnum = pgEnum("status", ["active", "inactive"]);
+export const statusEnum = pgEnum("status", ["active", "inactive"]);
 
 export const subscriptionsTable = pgTable("subscriptions", {
   userId: uuid("user_id")
