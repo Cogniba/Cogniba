@@ -4,9 +4,7 @@ import { profilesTable } from "./profilesTable";
 export const statusEnum = pgEnum("status", ["active", "inactive"]);
 
 export const subscriptionsTable = pgTable("subscriptions", {
-  id: uuid("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+  id: uuid("id").$defaultFn(() => crypto.randomUUID()),
   userId: uuid("user_id")
     .primaryKey()
     .references(() => profilesTable.userId, { onDelete: "cascade" })
