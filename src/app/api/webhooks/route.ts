@@ -25,8 +25,20 @@ export async function POST(request: NextRequest) {
 
   // TODO
   if (event.type === "checkout.session.completed") {
-  } else if (event.type === "payment_intent.succeeded") {
+    const session = event.data.object as Stripe.Checkout.Session;
+    const userId = session.metadata?.userId;
+  } else if (event.type === "invoice.payment_succeeded") {
+    const invoice = event.data.object as Stripe.Invoice;
+    const subscriptionId = invoice.subscription as string;
+  } else if (event.type === "customer.subscription.updated") {
+    const subscription = event.data.object as Stripe.Subscription;
+    const status = subscription.status;
+    const subscriptionId = subscription.id;
+  } else if (event.type === "customer.subscription.deleted") {
+    const subscription = event.data.object as Stripe.Subscription;
+    const subscriptionId = subscription.id;
   } else if (event.type === "payment_intent.payment_failed") {
-  } else {
+    const paymentIntent = event.data.object as Stripe.PaymentIntent;
+    // TODO
   }
 }
