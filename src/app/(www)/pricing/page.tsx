@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { CheckIcon } from "lucide-react";
 import styles from "@/styles/modules/AnimatedBorder.module.css";
 import { cn } from "@/lib/cn";
+import Link from "next/link";
 
 const pricingPlans = [
   {
@@ -59,7 +60,9 @@ export default function PricingPage() {
               <span className="text-5xl font-medium">${plan.price}</span>
               <span className="text-foreground/80">/ month</span>
             </p>
-            <Button className="w-full">{plan.buttonText}</Button>
+            <Link href="/sign-up">
+              <Button className="w-full">{plan.buttonText}</Button>
+            </Link>
             <hr className="my-8" />
             <div className="mb-2 grid gap-1.5">
               {plan.features.map((feature, index) => (
