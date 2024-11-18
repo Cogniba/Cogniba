@@ -1,16 +1,18 @@
 import { useTransition } from "react";
-import { CircleUserIcon, LogOutIcon } from "lucide-react";
+import { CircleArrowUpIcon, CircleUserIcon, LogOutIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useSidebar } from "@/context/SidebarContext";
 import { cn } from "@/lib/cn";
 import { useRouter } from "next/navigation";
 import LoaderWrapper from "../LoaderWrapper";
+import { Button } from "../ui/button";
 
 interface UserButtonProps {
   fullName: string;
@@ -20,12 +22,15 @@ interface UserButtonProps {
 export default function UserButton({ fullName, email }: UserButtonProps) {
   const { isExpanded, isUserDropdownOpen, setIsUserDropdownOpen } =
     useSidebar();
-  const [isPending, startTransition] = useTransition();
+  const [isSignOutPending, startSignOutTransition] = useTransition();
+  const [isUpgradePending, startUpgradeTransition] = useTransition();
+
+  const isPending = isSignOutPending || isUpgradePending;
 
   const router = useRouter();
 
   const handleSignOut = () => {
-    startTransition(async () => {
+    startSignOutTransition(async () => {
       const response = await fetch("/api/auth/sign-out", { method: "POST" });
       if (response.ok) {
         router.replace(process.env.NEXT_PUBLIC_SITE_URL!);
@@ -67,8 +72,23 @@ export default function UserButton({ fullName, email }: UserButtonProps) {
       <DropdownMenuContent
         className="w-[var(--radix-popper-anchor-width)] xs:w-64"
         align="start"
-        asChild
       >
+        <DropdownMenuGroup>
+          <DropdownMenuItem
+            className="font-medium focus:bg-background"
+            disabled={isPending}
+            onClick={handleSignOut}
+            onSelect={(e) => e.preventDefault()}
+          >
+            <LoaderWrapper loading={isUpgradePending}>
+              <Button className="w-full gap-1.5 font-semibold">
+                <CircleArrowUpIcon />
+                <span>Upgrade to Pro</span>
+              </Button>
+            </LoaderWrapper>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem
             className="font-medium"
@@ -76,9 +96,9 @@ export default function UserButton({ fullName, email }: UserButtonProps) {
             onClick={handleSignOut}
             onSelect={(e) => e.preventDefault()}
           >
-            <LoaderWrapper loading={isPending}>
-              <LogOutIcon className="mr-2 h-4 w-4" />
-              <div>Sign Out</div>
+            <LoaderWrapper loading={isSignOutPending}>
+              <LogOutIcon className="mr-1" />
+              <span>Sign Out</span>
             </LoaderWrapper>
           </DropdownMenuItem>
         </DropdownMenuGroup>
