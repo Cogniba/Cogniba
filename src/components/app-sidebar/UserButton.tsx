@@ -13,6 +13,7 @@ import { cn } from "@/lib/cn";
 import { useRouter } from "next/navigation";
 import LoaderWrapper from "../LoaderWrapper";
 import { Button } from "../ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface UserButtonProps {
   fullName: string;
@@ -28,12 +29,28 @@ export default function UserButton({ fullName, email }: UserButtonProps) {
   const isPending = isSignOutPending || isUpgradePending;
 
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleSignOut = () => {
     startSignOutTransition(async () => {
       const response = await fetch("/api/auth/sign-out", { method: "POST" });
       if (response.ok) {
         router.replace(process.env.NEXT_PUBLIC_SITE_URL!);
+      }
+    });
+  };
+
+  const handleUpgrade = () => {
+    startUpgradeTransition(async () => {
+      const response = await fetch("/api/stripe/checkoutSession", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        toast({ title: "Unexpected error ocurred", variant: "destructive" });
+      } else {
+        const { url } = await response.json();
+        window.location.assign(url as string);
       }
     });
   };
@@ -77,15 +94,15 @@ export default function UserButton({ fullName, email }: UserButtonProps) {
           <DropdownMenuItem
             className="font-medium focus:bg-background"
             disabled={isPending}
-            onClick={handleSignOut}
+            onClick={handleUpgrade}
             onSelect={(e) => e.preventDefault()}
           >
-            <LoaderWrapper loading={isUpgradePending}>
-              <Button className="w-full gap-1.5 font-semibold">
+            <Button className="w-full gap-1.5 font-semibold">
+              <LoaderWrapper loading={isUpgradePending}>
                 <CircleArrowUpIcon />
                 <span>Upgrade to Pro</span>
-              </Button>
-            </LoaderWrapper>
+              </LoaderWrapper>
+            </Button>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
