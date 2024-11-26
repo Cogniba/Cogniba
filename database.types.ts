@@ -102,21 +102,21 @@ export type Database = {
       }
       subscriptions: {
         Row: {
-          id: string | null
+          id: string
           last_payment_date: string | null
           status: Database["public"]["Enums"]["status"]
           subscription_id: string
           user_id: string
         }
         Insert: {
-          id?: string | null
+          id: string
           last_payment_date?: string | null
           status?: Database["public"]["Enums"]["status"]
           subscription_id: string
           user_id: string
         }
         Update: {
-          id?: string | null
+          id?: string
           last_payment_date?: string | null
           status?: Database["public"]["Enums"]["status"]
           subscription_id?: string
@@ -126,7 +126,7 @@ export type Database = {
           {
             foreignKeyName: "subscriptions_user_id_profiles_user_id_fk"
             columns: ["user_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
           },
