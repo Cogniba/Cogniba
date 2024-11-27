@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    await handler(event);
+    handler(event);
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
     console.error("Error processing webhook event:", error);
