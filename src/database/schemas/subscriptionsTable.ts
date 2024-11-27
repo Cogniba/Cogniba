@@ -13,7 +13,7 @@ export const subscriptionsTable = pgTable("subscriptions", {
     .notNull(),
   subscriptionId: text("subscription_id").notNull(),
   status: statusEnum("status").notNull().default("inactive"),
-  lastPaymentDate: date("last_payment_date"),
+  lastPaymentDate: date("last_payment_date", { mode: "date" }),
 });
 
 export type SubscriptionType = InferSelectModel<typeof profilesTable>;
